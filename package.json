@@ -7,9 +7,9 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && touch dist/.nojekyll",
     "preview": "astro preview",
-    "deploy": "astro build && gh-pages -d dist",
+    "deploy": "astro build && touch dist/.nojekyll && gh-pages -d dist --dotfiles",
     "astro": "astro"
   },
   "dependencies": {
