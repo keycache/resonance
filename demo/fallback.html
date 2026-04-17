@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resonance Demo Fallback Deck</title>
+    <style>
+      :root {
+        --bg: #0b1220;
+        --panel: #101a2f;
+        --panel-2: #17233d;
+        --text: #edf3ff;
+        --muted: #9fb0cf;
+        --brand: #58d1c9;
+        --amber: #f6c96a;
+        --ok: #6ae3a3;
+        --danger: #ff7f90;
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 12% 15%, #1a2f59 0%, transparent 36%),
+          radial-gradient(circle at 85% 85%, #19334f 0%, transparent 32%),
+          linear-gradient(140deg, #050a14, #0b1220 45%, #090e1a 100%);
+        min-height: 100vh;
+      }
+
+      .deck {
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        gap: 16px;
+        padding: 24px;
+      }
+
+      .topbar,
+      .controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .title {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .title h1 {
+        margin: 0;
+        font-size: clamp(1.2rem, 2.1vw, 1.7rem);
+        letter-spacing: 0.01em;
+      }
+
+      .title .mode {
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .badge {
+        background: color-mix(in oklab, var(--brand) 16%, transparent);
+        color: #c8fff8;
+        border: 1px solid color-mix(in oklab, var(--brand) 65%, #000);
+        padding: 0.28rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 600;
+      }
+
+      .stage {
+        display: none;
+        border: 1px solid #233151;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent), var(--panel);
+        border-radius: var(--radius);
+        padding: clamp(16px, 2.4vw, 28px);
+        min-height: 66vh;
+      }
+
+      .stage.active {
+        display: block;
+        animation: fade 170ms ease;
+      }
+
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .stage-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .stage-head h2 {
+        margin: 0;
+        font-size: clamp(1.3rem, 2.4vw, 2rem);
+      }
+
+      .stage-head p {
+        margin: 6px 0 0;
+        color: var(--muted);
+      }
+
+      .grid-2,
+      .grid-3 {
+        display: grid;
+        gap: 14px;
+      }
+
+      .grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .card {
+        border: 1px solid #2a3960;
+        background: var(--panel-2);
+        border-radius: 14px;
+        padding: 14px;
+      }
+
+      .card h3,
+      .card h4 {
+        margin: 0 0 8px;
+      }
+
+      .mono {
+        font-family: "JetBrains Mono", "SFMono-Regular", ui-monospace, monospace;
+        font-size: 0.86rem;
+        line-height: 1.56;
+        white-space: pre-wrap;
+        margin: 0;
+      }
+
+      .lesson {
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      .changed {
+        background: color-mix(in oklab, var(--amber) 22%, transparent);
+        border: 1px solid color-mix(in oklab, var(--amber) 68%, #000);
+        border-radius: 6px;
+        padding: 0 4px;
+      }
+
+      .chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+
+      .chip {
+        border: 1px solid #34528f;
+        background: color-mix(in oklab, #3f74d9 14%, transparent);
+        border-radius: 999px;
+        padding: 0.24rem 0.66rem;
+        font-size: 0.82rem;
+        color: #d8e7ff;
+      }
+
+      .meta {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .footer-left {
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .dotnav {
+        display: flex;
+        gap: 8px;
+      }
+
+      .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 999px;
+        border: 1px solid #4663a0;
+        background: transparent;
+      }
+
+      .dot.active {
+        background: var(--brand);
+        border-color: color-mix(in oklab, var(--brand) 74%, #000);
+      }
+
+      .buttons {
+        display: flex;
+        gap: 10px;
+      }
+
+      button {
+        border: 1px solid #41609e;
+        background: #16264a;
+        color: var(--text);
+        padding: 0.58rem 0.9rem;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      button:hover {
+        background: #1c2f5a;
+      }
+
+      .primary {
+        border-color: color-mix(in oklab, var(--brand) 74%, #000);
+        background: color-mix(in oklab, var(--brand) 28%, #12203f);
+      }
+
+      .install-box {
+        border: 1px dashed #4766a7;
+        border-radius: 12px;
+        padding: 12px;
+        background: color-mix(in oklab, #17386d 25%, transparent);
+      }
+
+      .ok {
+        color: var(--ok);
+      }
+
+      .warn {
+        color: var(--amber);
+      }
+
+      .risk {
+        color: var(--danger);
+      }
+
+      @media (max-width: 900px) {
+        .grid-2,
+        .grid-3 {
+          grid-template-columns: 1fr;
+        }
+
+        .deck {
+          padding: 14px;
+        }
+
+        .footer-left {
+          font-size: 0.84rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="deck" aria-live="polite">
+      <header class="topbar">
+        <div class="title">
+          <h1>Resonance Demo Fallback</h1>
+          <span class="mode">Live-slide backup when inference or network setup fails</span>
+        </div>
+        <span class="badge" id="slide-counter">Slide 1 / 5</span>
+      </header>
+
+      <section class="stage active" data-index="0" aria-label="Input">
+        <div class="stage-head">
+          <div>
+            <h2>Input</h2>
+            <p>Teacher pastes or captures a worksheet, then chooses classroom context.</p>
+          </div>
+          <div class="meta">Step 1 of 5</div>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Worksheet Text</h3>
+            <p class="lesson" id="input-worksheet">Loading worksheet sample...</p>
+          </article>
+          <article class="card">
+            <h3>Context Profile</h3>
+            <div class="chips">
+              <span class="chip">Geography: Coastal</span>
+              <span class="chip">Community: Fishing Families</span>
+              <span class="chip">Language Register: Tagalog</span>
+              <span class="chip">Grade: 5</span>
+            </div>
+            <p class="lesson">Run Resonance to preserve learning structure while adapting examples and framing to local context.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="stage" data-index="1" aria-label="Stage 1 Deconstruct">
+        <div class="stage-head">
+          <div>
+            <h2>Stage 1: Deconstruct</h2>
+            <p>Core lesson invariants are extracted as machine-readable JSON.</p>
+          </div>
+          <div class="meta">Step 2 of 5</div>
+        </div>
+        <article class="card">
+          <h3>Core JSON (excerpt)</h3>
+          <pre class="mono" id="stage1-json">Loading Stage 1 output...</pre>
+        </article>
+      </section>
+
+      <section class="stage" data-index="2" aria-label="Stage 2 Re-anchor">
+        <div class="stage-head">
+          <div>
+            <h2>Stage 2: Re-anchor</h2>
+            <p>Original lesson versus adapted draft with changed spans highlighted.</p>
+          </div>
+          <div class="meta">Step 3 of 5</div>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <h3>Original</h3>
+            <p class="lesson" id="stage2-original">Loading original text...</p>
+          </article>
+          <article class="card">
+            <h3>Adapted (Diff-style highlight)</h3>
+            <p class="lesson" id="stage2-adapted">
+              The sun heats water near the sea and ponds. Water turns into vapor and rises. Clouds form as vapor cools, then rain falls back down.
+              <span class="changed">Communities collect rainwater in tanks for cooking, cleaning, and farming.</span>
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="stage" data-index="3" aria-label="Stage 3 Scaffold">
+        <div class="stage-head">
+          <div>
+            <h2>Stage 3: Scaffold</h2>
+            <p>Three readability variants generated from the same preserved instructional core.</p>
+          </div>
+          <div class="meta">Step 4 of 5</div>
+        </div>
+        <div class="grid-3">
+          <article class="card">
+            <h4>Struggling</h4>
+            <p class="lesson" id="stage3-struggling">Loading...</p>
+          </article>
+          <article class="card">
+            <h4>On-level</h4>
+            <p class="lesson" id="stage3-onlevel">Loading...</p>
+          </article>
+          <article class="card">
+            <h4>Advanced</h4>
+            <p class="lesson" id="stage3-advanced">Loading...</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="stage" data-index="4" aria-label="Install Prompt">
+        <div class="stage-head">
+          <div>
+            <h2>Install Prompt / Offline Ready</h2>
+            <p>After first successful run, app prompts install and can run offline.</p>
+          </div>
+          <div class="meta">Step 5 of 5</div>
+        </div>
+        <article class="card">
+          <div class="install-box">
+            <h3 style="margin-top: 0">Install Resonance</h3>
+            <p class="lesson">Save to home screen for one-tap launch in classrooms with weak connectivity.</p>
+            <div class="buttons" style="margin-top: 10px">
+              <button class="primary" type="button">Install</button>
+              <button type="button">Not now</button>
+            </div>
+          </div>
+          <p class="meta" style="margin-top: 14px">
+            <span class="ok">●</span> Model artifacts can be local
+            <span class="warn">●</span> DEMO_MODE can stream pre-baked assets
+            <span class="risk">●</span> If live run fails, this deck is presentation fallback
+          </p>
+        </article>
+      </section>
+
+      <footer class="controls">
+        <div class="footer-left">Keyboard: Left/Right arrows, Space, Home/End, F for browser fullscreen</div>
+        <div class="dotnav" id="dots" aria-label="Slide navigation"></div>
+        <div class="buttons">
+          <button id="prev" type="button" aria-label="Previous slide">Previous</button>
+          <button id="next" class="primary" type="button" aria-label="Next slide">Next</button>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+      const stages = Array.from(document.querySelectorAll('.stage'));
+      const counter = document.getElementById('slide-counter');
+      const dotsRoot = document.getElementById('dots');
+      const prevBtn = document.getElementById('prev');
+      const nextBtn = document.getElementById('next');
+      let current = 0;
+
+      function normalize(text, maxLength) {
+        const value = String(text || '').replace(/\s+/g, ' ').trim();
+        if (value.length <= maxLength) return value;
+        return value.slice(0, maxLength - 1) + '…';
+      }
+
+      function setStage(index) {
+        current = Math.max(0, Math.min(index, stages.length - 1));
+        for (const [i, stage] of stages.entries()) {
+          stage.classList.toggle('active', i === current);
+        }
+        counter.textContent = `Slide ${current + 1} / ${stages.length}`;
+
+        const dots = Array.from(dotsRoot.querySelectorAll('.dot'));
+        for (const [i, dot] of dots.entries()) {
+          dot.classList.toggle('active', i === current);
+        }
+
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === stages.length - 1;
+      }
+
+      function makeDots() {
+        dotsRoot.innerHTML = '';
+        for (let i = 0; i < stages.length; i += 1) {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'dot';
+          dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+          dot.addEventListener('click', () => setStage(i));
+          dotsRoot.appendChild(dot);
+        }
+      }
+
+      async function loadDemoAssets() {
+        let payload;
+        let worksheet;
+
+        try {
+          const result = await fetch('/demo/output-coastal-tagalog.json', { cache: 'no-store' });
+          payload = await result.json();
+        } catch {
+          payload = null;
+        }
+
+        try {
+          const result = await fetch('/demo/worksheet-water-cycle-grade5.txt', { cache: 'no-store' });
+          worksheet = await result.text();
+        } catch {
+          worksheet = '';
+        }
+
+        const worksheetEl = document.getElementById('input-worksheet');
+        if (worksheetEl) {
+          worksheetEl.textContent = normalize(worksheet || 'Water cycle worksheet sample is unavailable in this environment.', 460);
+        }
+
+        const stage1El = document.getElementById('stage1-json');
+        if (stage1El) {
+          const core = payload && payload.core && typeof payload.core === 'object' ? payload.core : {};
+          const excerpt = {
+            objective: core.objective || 'Students identify and sequence the water cycle stages.',
+            blooms_level: core.blooms_level || 'understand',
+            vocab_ceiling: core.vocab_ceiling || 'grade_5',
+            assessment_type: core.assessment_type || 'diagram_labeling_and_short_answer',
+            key_concepts: Array.isArray(core.key_concepts) ? core.key_concepts : ['evaporation', 'condensation', 'precipitation'],
+          };
+          stage1El.textContent = JSON.stringify(excerpt, null, 2);
+        }
+
+        const originalEl = document.getElementById('stage2-original');
+        if (originalEl) {
+          originalEl.textContent = normalize(worksheet || 'Original lesson preview unavailable.', 700);
+        }
+
+        const stage2AdaptedEl = document.getElementById('stage2-adapted');
+        if (stage2AdaptedEl) {
+          const adapted = payload && typeof payload.adaptedLesson === 'string' ? payload.adaptedLesson : '';
+          stage2AdaptedEl.innerHTML = '';
+          const clean = normalize(adapted, 900);
+          const parts = clean.split('In many communities');
+          if (parts.length > 1) {
+            stage2AdaptedEl.append(document.createTextNode(parts[0]));
+            const changed = document.createElement('span');
+            changed.className = 'changed';
+            changed.textContent = 'In many communities' + parts.slice(1).join('In many communities');
+            stage2AdaptedEl.append(document.createTextNode(' '));
+            stage2AdaptedEl.append(changed);
+          } else {
+            stage2AdaptedEl.textContent = clean || 'Adapted lesson preview unavailable.';
+          }
+        }
+
+        const diff = payload && payload.differentiated && typeof payload.differentiated === 'object' ? payload.differentiated : {};
+        const strugglingEl = document.getElementById('stage3-struggling');
+        const onLevelEl = document.getElementById('stage3-onlevel');
+        const advancedEl = document.getElementById('stage3-advanced');
+
+        if (strugglingEl) {
+          strugglingEl.textContent = normalize(diff.struggling || 'Simple version placeholder.', 420);
+        }
+        if (onLevelEl) {
+          onLevelEl.textContent = normalize(diff.on_level || 'On-level version placeholder.', 420);
+        }
+        if (advancedEl) {
+          advancedEl.textContent = normalize(diff.advanced || 'Advanced version placeholder.', 420);
+        }
+      }
+
+      document.addEventListener('keydown', (event) => {
+        const key = event.key;
+
+        if (key === 'ArrowRight' || key === ' ' || key === 'PageDown') {
+          event.preventDefault();
+          setStage(current + 1);
+          return;
+        }
+
+        if (key === 'ArrowLeft' || key === 'PageUp') {
+          event.preventDefault();
+          setStage(current - 1);
+          return;
+        }
+
+        if (key === 'Home') {
+          event.preventDefault();
+          setStage(0);
+          return;
+        }
+
+        if (key === 'End') {
+          event.preventDefault();
+          setStage(stages.length - 1);
+          return;
+        }
+
+        if (key.toLowerCase() === 'f') {
+          if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+          } else if (document.exitFullscreen) {
+            document.exitFullscreen();
+          }
+        }
+      });
+
+      prevBtn.addEventListener('click', () => setStage(current - 1));
+      nextBtn.addEventListener('click', () => setStage(current + 1));
+
+      makeDots();
+      setStage(0);
+      loadDemoAssets();
+    </script>
+  </body>
+</html>

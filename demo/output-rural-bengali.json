@@ -1,0 +1,48 @@
+{
+  "core": {
+    "objective": "Students will be able to identify, describe, and sequence the three main stages of the water cycle.",
+    "blooms_level": "understand",
+    "vocab_ceiling": "grade_5",
+    "assessment_type": "diagram_labeling_and_short_answer",
+    "key_concepts": [
+      "evaporation",
+      "condensation",
+      "precipitation",
+      "water cycle",
+      "water vapor"
+    ],
+    "student_task": "Draw and label the three stages of the water cycle, and write two sentences explaining why rain is important for people and plants.",
+    "response_format": "Labeled diagram and written sentences",
+    "lesson_structure": "Introduction of three main stages (evaporation, condensation, precipitation) followed by a practical application/importance section, culminating in a drawing and explanatory writing task.",
+    "preservation_rules": [
+      "Must introduce the three stages of the water cycle.",
+      "Must define evaporation, condensation, and precipitation.",
+      "Must include a component related to the importance of rainwater usage."
+    ],
+    "immutable": [
+      "objective",
+      "blooms_level",
+      "vocab_ceiling",
+      "assessment_type",
+      "key_concepts",
+      "student_task",
+      "response_format",
+      "lesson_structure",
+      "preservation_rules"
+    ],
+    "mutable": [
+      "examples",
+      "metaphors",
+      "scenarios",
+      "analogies",
+      "place_names",
+      "object_references"
+    ]
+  },
+  "adaptedLesson": "Water Cycle Worksheet - Grade 5\n\nRead the short lesson and then complete the tasks.\n\nThe water cycle has three main stages: evaporation, condensation, and precipitation.\n\nEvaporation happens when the sun heats water in the sea or fishing ponds. The water changes into water vapor and rises into the air.\n\nCondensation happens when water vapor cools in the sky and forms clouds.\n\nPrecipitation happens when clouds become heavy and water falls back to Earth as rain.\n\nIn many communities, rainwater is collected in tanks or barrels and used for drinking, cooking, cleaning, and farming. During dry periods, people must use water carefully.\n\nTasks:\n1. Draw and label the three stages of the water cycle.\n2. Write two sentences explaining why rain is important for people and plants.",
+  "differentiated": {
+    "struggling": "The water cycle has three parts. First is evaporation. Evaporation is when the sun warms water in lakes. The water turns into air. Next is condensation. Condensation is when the air gets cold and makes clouds. Then is precipitation. Precipitation is when the clouds get full and water falls as rain. Rain helps people drink water. It also helps plants grow big and strong.",
+    "on_level": "The water cycle has three main stages: evaporation, condensation, and precipitation. Evaporation happens when the sun heats water in the sea or fishing ponds. The water changes into water vapor and rises into the air. Condensation happens when water vapor cools in the sky and forms clouds. Precipitation happens when clouds become heavy and water falls back to Earth as rain. In many communities, rainwater is collected in tanks or barrels and used for drinking, cooking, cleaning, and farming. During dry periods, people must use water carefully.",
+    "advanced": "The water cycle involves three fundamental processes: evaporation, condensation, and precipitation. Evaporation occurs when solar energy converts liquid water into water vapor, elevating it into the atmosphere. Subsequently, condensation takes place as this water vapor cools, leading to the formation of clouds. Finally, precipitation involves the release of accumulated water back to the Earth in the form of rain. Recognizing the critical role of this cycle highlights the necessity of managing rainwater resources; for instance, collected water is vital for essential domestic needs such as drinking and agriculture."
+  }
+}
